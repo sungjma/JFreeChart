@@ -132,6 +132,12 @@ public abstract class Title extends AbstractBlock
     private boolean notify;
 
     /**
+     * A flag that can indicate that this title's bounding box should overlap with other titles'
+     * bounding boxes.
+     */
+    private boolean overlap;
+
+    /**
      * Creates a new title, using default attributes where necessary.
      */
     protected Title() {
@@ -202,6 +208,7 @@ public abstract class Title extends AbstractBlock
         setPadding(padding);
         this.listenerList = new EventListenerList();
         this.notify = true;
+        this.overlap = false;
 
     }
 
@@ -335,6 +342,26 @@ public abstract class Title extends AbstractBlock
         }
     }
 
+    /**
+     * Returns the flag that indicates whether or not this Title's bounding
+     * box should overlap with the others.
+     * 
+     * @return the flag
+     */
+    public boolean getOverlap() {
+    	return this.overlap;
+    }
+
+    /**
+     * Sets the flag that indicates whether or not this Title's bounding
+     * box should overlap with the others.
+     * 
+     * @param flag	the new vale of the flag
+     */
+    public void setOverlap(boolean overlap) {
+    	this.overlap = overlap;
+    }
+    
     /**
      * Draws the title on a Java 2D graphics device (such as the screen or a
      * printer).
