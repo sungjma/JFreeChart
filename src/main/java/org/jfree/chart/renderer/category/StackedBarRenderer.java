@@ -114,6 +114,7 @@ import org.jfree.data.general.DatasetUtilities;
 import org.jfree.ui.RectangleEdge;
 import org.jfree.ui.TextAnchor;
 import org.jfree.util.PublicCloneable;
+import org.jfree.util.SortOrder;
 
 /**
  * A stacked bar renderer for use with the {@link CategoryPlot} class.
@@ -132,6 +133,9 @@ public class StackedBarRenderer extends BarRenderer
 
     /** A flag that controls whether the bars display values or percentages. */
     private boolean renderAsPercentages;
+
+    /**  A flag that controls the placement of the rows for each column. */
+    private SortOrder rowPlacementOrder; 
 
     /**
      * Creates a new renderer.  By default, the renderer has no tool tip
@@ -162,6 +166,8 @@ public class StackedBarRenderer extends BarRenderer
         setBaseNegativeItemLabelPosition(p);
         setPositiveItemLabelPositionFallback(null);
         setNegativeItemLabelPositionFallback(null);
+        
+        rowPlacementOrder = SortOrder.DESCENDING;
     }
 
     /**
@@ -189,6 +195,30 @@ public class StackedBarRenderer extends BarRenderer
     public void setRenderAsPercentages(boolean asPercentages) {
         this.renderAsPercentages = asPercentages;
         fireChangeEvent();
+    }
+
+    /**
+     * Returns <code>DESCENDING</code> if the first category appears at the top
+     * of each bar (or bottom, for negative bars), and <code>ASCENDING</code> if
+     * it appears at the bottom.
+     * 
+     * @return The sort order.
+     */
+    public SortOrder getRowPlacementOrder() {
+    	return rowPlacementOrder;
+    }
+
+    /**
+     * Sets the flag that controls the placement of the rows within each column,
+     * and sends a {@link RendererChangeEvent} to all registered listeners.
+     * 
+     * @param rowPlacementOrder the ordering
+     * 
+     * @see #getRowPlacementOrder()
+     */
+    public void setRowPlacementOrder(SortOrder rowPlacementOrder) {
+    	this.rowPlacementOrder = rowPlacementOrder;
+    	fireChangeEvent();
     }
 
     /**
@@ -319,7 +349,9 @@ public class StackedBarRenderer extends BarRenderer
         double positiveBase = getBase();
         double negativeBase = positiveBase;
 
-        for (int i = row + 1; i < getRowCount(); i++) {
+        for (int i = ((rowPlacementOrder == SortOrder.DESCENDING) ? 0 : row + 1);
+        		i < ((rowPlacementOrder == SortOrder.DESCENDING) ? row : getRowCount()); i++) {
+
             Number v = dataset.getValue(i, column);
             if (v != null && isSeriesVisible(i)) {
                 double d = v.doubleValue();
