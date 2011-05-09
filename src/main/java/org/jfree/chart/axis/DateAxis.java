@@ -197,6 +197,9 @@ public class DateAxis extends ValueAxis implements Cloneable, Serializable {
     /** The override date format. */
     private DateFormat dateFormatOverride;
 
+    /** The angle to rotate tick labels at */
+    private double tickLabelAngle;
+
     /**
      * Tick marks can be displayed at the start or the middle of the time
      * period.
@@ -386,6 +389,7 @@ public class DateAxis extends ValueAxis implements Cloneable, Serializable {
         this.timeZone = zone;
         this.locale = locale;
         this.timeline = DEFAULT_TIMELINE;
+        this.tickLabelAngle = 0.0;
     }
 
     /**
@@ -519,6 +523,28 @@ public class DateAxis extends ValueAxis implements Cloneable, Serializable {
     public void setDateFormatOverride(DateFormat formatter) {
         this.dateFormatOverride = formatter;
         notifyListeners(new AxisChangeEvent(this));
+    }
+
+    /**
+     * Returns the tick label angle, in radians. Will always be between
+     * -Math.PI / 2.0 and Math.PI / 2.0, inclusive.
+     * 
+     * @return the angle (in radians)
+     * 
+     */
+    public double getTickLabelAngle() {
+    	return this.tickLabelAngle;
+    }
+
+    /**
+     * Sets the tick lable angle, in radians. Must always be between
+     * -Math.PI / 2.0 and Math.PI / 2.0, inclusive.
+     * 
+     * @param tickLabelAngle the angle, in radians
+     */
+    public void setTickLabelAngle(double tickLabelAngle) {
+    	this.tickLabelAngle = tickLabelAngle;
+    	notifyListeners(new AxisChangeEvent(this));
     }
 
     /**
@@ -729,6 +755,10 @@ public class DateAxis extends ValueAxis implements Cloneable, Serializable {
         return (!this.timeline.containsDomainValue(new Date(millis)));
     }
 
+    public boolean isVerticalTickLabels() {
+    	return Math.abs(tickLabelAngle - (Math.PI / 2.0)) < Double.MIN_VALUE;
+    }
+    
     /**
      * Translates the data value to the display coordinates (Java 2D User Space)
      * of the chart.
@@ -1451,32 +1481,26 @@ public class DateAxis extends ValueAxis implements Cloneable, Serializable {
         Font tickLabelFont = getTickLabelFont();
         FontRenderContext frc = g2.getFontRenderContext();
         LineMetrics lm = tickLabelFont.getLineMetrics("ABCxyz", frc);
-        if (isVerticalTickLabels()) {
-            // all tick labels have the same width (equal to the height of
-            // the font)...
-            result += lm.getHeight();
+
+        // look at lower and upper bounds...
+        DateRange range = (DateRange) getRange();
+        Date lower = range.getLowerDate();
+        Date upper = range.getUpperDate();
+        String lowerStr = null;
+        String upperStr = null;
+        DateFormat formatter = getDateFormatOverride();
+        if (formatter != null) {
+            lowerStr = formatter.format(lower);
+            upperStr = formatter.format(upper);
         }
         else {
-            // look at lower and upper bounds...
-            DateRange range = (DateRange) getRange();
-            Date lower = range.getLowerDate();
-            Date upper = range.getUpperDate();
-            String lowerStr = null;
-            String upperStr = null;
-            DateFormat formatter = getDateFormatOverride();
-            if (formatter != null) {
-                lowerStr = formatter.format(lower);
-                upperStr = formatter.format(upper);
-            }
-            else {
-                lowerStr = unit.dateToString(lower);
-                upperStr = unit.dateToString(upper);
-            }
-            FontMetrics fm = g2.getFontMetrics(tickLabelFont);
-            double w1 = fm.stringWidth(lowerStr);
-            double w2 = fm.stringWidth(upperStr);
-            result += Math.max(w1, w2);
+            lowerStr = unit.dateToString(lower);
+            upperStr = unit.dateToString(upper);
         }
+        FontMetrics fm = g2.getFontMetrics(tickLabelFont);
+        double w1 = fm.stringWidth(lowerStr);
+        double w2 = fm.stringWidth(upperStr);
+        result += (Math.cos(tickLabelAngle) * Math.max(w1, w2)) + lm.getHeight();
 
         return result;
 
@@ -1504,32 +1528,26 @@ public class DateAxis extends ValueAxis implements Cloneable, Serializable {
         Font tickLabelFont = getTickLabelFont();
         FontRenderContext frc = g2.getFontRenderContext();
         LineMetrics lm = tickLabelFont.getLineMetrics("ABCxyz", frc);
-        if (!isVerticalTickLabels()) {
-            // all tick labels have the same width (equal to the height of
-            // the font)...
-            result += lm.getHeight();
+
+        // look at lower and upper bounds...
+        DateRange range = (DateRange) getRange();
+        Date lower = range.getLowerDate();
+        Date upper = range.getUpperDate();
+        String lowerStr = null;
+        String upperStr = null;
+        DateFormat formatter = getDateFormatOverride();
+        if (formatter != null) {
+            lowerStr = formatter.format(lower);
+            upperStr = formatter.format(upper);
         }
         else {
-            // look at lower and upper bounds...
-            DateRange range = (DateRange) getRange();
-            Date lower = range.getLowerDate();
-            Date upper = range.getUpperDate();
-            String lowerStr = null;
-            String upperStr = null;
-            DateFormat formatter = getDateFormatOverride();
-            if (formatter != null) {
-                lowerStr = formatter.format(lower);
-                upperStr = formatter.format(upper);
-            }
-            else {
-                lowerStr = unit.dateToString(lower);
-                upperStr = unit.dateToString(upper);
-            }
-            FontMetrics fm = g2.getFontMetrics(tickLabelFont);
-            double w1 = fm.stringWidth(lowerStr);
-            double w2 = fm.stringWidth(upperStr);
-            result += Math.max(w1, w2);
+            lowerStr = unit.dateToString(lower);
+            upperStr = unit.dateToString(upper);
         }
+        FontMetrics fm = g2.getFontMetrics(tickLabelFont);
+        double w1 = fm.stringWidth(lowerStr);
+        double w2 = fm.stringWidth(upperStr);
+        result += (Math.sin(tickLabelAngle) * Math.max(w1, w2)) + lm.getHeight();
 
         return result;
 
@@ -1655,16 +1673,10 @@ public class DateAxis extends ValueAxis implements Cloneable, Serializable {
                 }
                 TextAnchor anchor = null;
                 TextAnchor rotationAnchor = null;
-                double angle = 0.0;
+                double angle = tickLabelAngle;
                 if (isVerticalTickLabels()) {
                     anchor = TextAnchor.CENTER_RIGHT;
                     rotationAnchor = TextAnchor.CENTER_RIGHT;
-                    if (edge == RectangleEdge.TOP) {
-                        angle = Math.PI / 2.0;
-                    }
-                    else {
-                        angle = -Math.PI / 2.0;
-                    }
                 }
                 else {
                     if (edge == RectangleEdge.TOP) {
@@ -1672,8 +1684,8 @@ public class DateAxis extends ValueAxis implements Cloneable, Serializable {
                         rotationAnchor = TextAnchor.BOTTOM_CENTER;
                     }
                     else {
-                        anchor = TextAnchor.TOP_CENTER;
-                        rotationAnchor = TextAnchor.TOP_CENTER;
+                        anchor = TextAnchor.CENTER_RIGHT;
+                        rotationAnchor = TextAnchor.CENTER_RIGHT;
                     }
                 }
 
@@ -1768,16 +1780,10 @@ public class DateAxis extends ValueAxis implements Cloneable, Serializable {
                 }
                 TextAnchor anchor = null;
                 TextAnchor rotationAnchor = null;
-                double angle = 0.0;
+                double angle = tickLabelAngle;
                 if (isVerticalTickLabels()) {
                     anchor = TextAnchor.BOTTOM_CENTER;
                     rotationAnchor = TextAnchor.BOTTOM_CENTER;
-                    if (edge == RectangleEdge.LEFT) {
-                        angle = -Math.PI / 2.0;
-                    }
-                    else {
-                        angle = Math.PI / 2.0;
-                    }
                 }
                 else {
                     if (edge == RectangleEdge.LEFT) {
