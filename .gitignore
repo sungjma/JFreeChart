@@ -1,0 +1,7 @@
+# Maven cruft
+target/
+
+# Eclipse cruft
+.project
+.classpath
+.settings/
