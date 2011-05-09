@@ -1684,7 +1684,7 @@ public class DateAxis extends ValueAxis implements Cloneable, Serializable {
                         rotationAnchor = TextAnchor.BOTTOM_CENTER;
                     }
                     else {
-                        anchor = TextAnchor.CENTER_RIGHT;
+                        anchor = (angle == 0.0) ? TextAnchor.TOP_CENTER : TextAnchor.CENTER_RIGHT;
                         rotationAnchor = TextAnchor.CENTER_RIGHT;
                     }
                 }
