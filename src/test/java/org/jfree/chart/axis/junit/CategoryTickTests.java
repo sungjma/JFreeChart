@@ -52,14 +52,14 @@ import junit.framework.Test;
 import junit.framework.TestCase;
 import junit.framework.TestSuite;
 
-import org.jfree.chart.axis.CategoryTick;
+import org.jfree.chart.axis.CategoryTextTick;
 import org.jfree.text.TextBlock;
 import org.jfree.text.TextBlockAnchor;
 import org.jfree.text.TextLine;
 import org.jfree.ui.TextAnchor;
 
 /**
- * Tests for the {@link CategoryTick} class.
+ * Tests for the {@link CategoryTextTick} class.
  */
 public class CategoryTickTests extends TestCase {
 
@@ -97,33 +97,33 @@ public class CategoryTickTests extends TestCase {
         TextAnchor ta1 = TextAnchor.CENTER;
         TextAnchor ta2 = TextAnchor.BASELINE_LEFT;
 
-        CategoryTick t1 = new CategoryTick(c1, tb1, tba1, ta1, 1.0f);
-        CategoryTick t2 = new CategoryTick(c1, tb1, tba1, ta1, 1.0f);
+        CategoryTextTick t1 = new CategoryTextTick(c1, tb1, tba1, ta1, 1.0f);
+        CategoryTextTick t2 = new CategoryTextTick(c1, tb1, tba1, ta1, 1.0f);
         assertTrue(t1.equals(t2));
 
-        t1 = new CategoryTick(c2, tb1, tba1, ta1, 1.0f);
+        t1 = new CategoryTextTick(c2, tb1, tba1, ta1, 1.0f);
         assertFalse(t1.equals(t2));
-        t2 = new CategoryTick(c2, tb1, tba1, ta1, 1.0f);
+        t2 = new CategoryTextTick(c2, tb1, tba1, ta1, 1.0f);
         assertTrue(t1.equals(t2));
 
-        t1 = new CategoryTick(c2, tb2, tba1, ta1, 1.0f);
+        t1 = new CategoryTextTick(c2, tb2, tba1, ta1, 1.0f);
         assertFalse(t1.equals(t2));
-        t2 = new CategoryTick(c2, tb2, tba1, ta1, 1.0f);
+        t2 = new CategoryTextTick(c2, tb2, tba1, ta1, 1.0f);
         assertTrue(t1.equals(t2));
 
-        t1 = new CategoryTick(c2, tb2, tba2, ta1, 1.0f);
+        t1 = new CategoryTextTick(c2, tb2, tba2, ta1, 1.0f);
         assertFalse(t1.equals(t2));
-        t2 = new CategoryTick(c2, tb2, tba2, ta1, 1.0f);
+        t2 = new CategoryTextTick(c2, tb2, tba2, ta1, 1.0f);
         assertTrue(t1.equals(t2));
 
-        t1 = new CategoryTick(c2, tb2, tba2, ta2, 1.0f);
+        t1 = new CategoryTextTick(c2, tb2, tba2, ta2, 1.0f);
         assertFalse(t1.equals(t2));
-        t2 = new CategoryTick(c2, tb2, tba2, ta2, 1.0f);
+        t2 = new CategoryTextTick(c2, tb2, tba2, ta2, 1.0f);
         assertTrue(t1.equals(t2));
 
-        t1 = new CategoryTick(c2, tb2, tba2, ta2, 2.0f);
+        t1 = new CategoryTextTick(c2, tb2, tba2, ta2, 2.0f);
         assertFalse(t1.equals(t2));
-        t2 = new CategoryTick(c2, tb2, tba2, ta2, 2.0f);
+        t2 = new CategoryTextTick(c2, tb2, tba2, ta2, 2.0f);
         assertTrue(t1.equals(t2));
 
     }
@@ -139,8 +139,8 @@ public class CategoryTickTests extends TestCase {
         TextBlockAnchor tba1 = TextBlockAnchor.CENTER;
         TextAnchor ta1 = TextAnchor.CENTER;
 
-        CategoryTick t1 = new CategoryTick(c1, tb1, tba1, ta1, 1.0f);
-        CategoryTick t2 = new CategoryTick(c1, tb1, tba1, ta1, 1.0f);
+        CategoryTextTick t1 = new CategoryTextTick(c1, tb1, tba1, ta1, 1.0f);
+        CategoryTextTick t2 = new CategoryTextTick(c1, tb1, tba1, ta1, 1.0f);
         assertTrue(t1.equals(t2));
         int h1 = t1.hashCode();
         int h2 = t2.hashCode();
@@ -151,13 +151,13 @@ public class CategoryTickTests extends TestCase {
      * Confirm that cloning works.
      */
     public void testCloning() {
-        CategoryTick t1 = new CategoryTick(
+        CategoryTextTick t1 = new CategoryTextTick(
             "C1", new TextBlock(), TextBlockAnchor.CENTER,
             TextAnchor.CENTER, 1.5f
         );
-        CategoryTick t2 = null;
+        CategoryTextTick t2 = null;
         try {
-            t2 = (CategoryTick) t1.clone();
+            t2 = (CategoryTextTick) t1.clone();
         }
         catch (CloneNotSupportedException e) {
             System.err.println("Failed to clone.");
@@ -172,9 +172,9 @@ public class CategoryTickTests extends TestCase {
      */
     public void testSerialization() {
 
-        CategoryTick t1 = new CategoryTick("C1", new TextBlock(),
+        CategoryTextTick t1 = new CategoryTextTick("C1", new TextBlock(),
                 TextBlockAnchor.CENTER, TextAnchor.CENTER, 1.5f);
-        CategoryTick t2 = null;
+        CategoryTextTick t2 = null;
 
         try {
             ByteArrayOutputStream buffer = new ByteArrayOutputStream();
@@ -184,7 +184,7 @@ public class CategoryTickTests extends TestCase {
 
             ObjectInput in = new ObjectInputStream(
                     new ByteArrayInputStream(buffer.toByteArray()));
-            t2 = (CategoryTick) in.readObject();
+            t2 = (CategoryTextTick) in.readObject();
             in.close();
         }
         catch (Exception e) {
