@@ -1072,8 +1072,8 @@ public abstract class Axis implements Cloneable, Serializable {
             PlotRenderingInfo plotState){
 
 		if (plotState == null || plotState.getOwner() == null) {
-            return;  // no need to create entity if we can´t save it anyways...
-        }
+			return;
+        	}
 		Rectangle2D hotspot = null;
 		if (edge.equals(RectangleEdge.TOP)){
 			hotspot = new Rectangle2D.Double(dataArea.getX(),
