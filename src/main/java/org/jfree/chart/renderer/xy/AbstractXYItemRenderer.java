@@ -119,6 +119,7 @@ import java.awt.Composite;
 import java.awt.Font;
 import java.awt.GradientPaint;
 import java.awt.Graphics2D;
+import java.awt.Image;
 import java.awt.Paint;
 import java.awt.Shape;
 import java.awt.Stroke;
@@ -126,6 +127,7 @@ import java.awt.geom.Ellipse2D;
 import java.awt.geom.Line2D;
 import java.awt.geom.Point2D;
 import java.awt.geom.Rectangle2D;
+import java.awt.image.ImageObserver;
 import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.Collection;
@@ -1057,6 +1059,36 @@ public abstract class AbstractXYItemRenderer extends AbstractRenderer
                         (float) coordinates.getX(), (float) coordinates.getY(),
                         marker.getLabelTextAnchor());
             }
+            
+            // Now draw any icons
+            Image firstIcon = marker.getFirstIcon();
+            Image secondIcon = marker.getSecondIcon();
+            if (firstIcon != null) {
+                Point2D coordinates = calculateDomainMarkerTextAnchorPoint(
+                        g2, orientation, dataArea, line.getBounds2D(),
+                        marker.getLabelOffset(),
+                        LengthAdjustmentType.EXPAND, anchor);
+            	g2.drawImage(firstIcon, (int) coordinates.getX() - firstIcon.getWidth(null) - 5 , (int) coordinates.getY(), new ImageObserver() {
+					@Override
+					public boolean imageUpdate(Image img, int infoflags, int x, int y,
+							int width, int height) {
+						return false;
+					}
+				});
+            }
+            if (secondIcon != null) {
+                Point2D coordinates = calculateDomainMarkerTextAnchorPoint(
+                        g2, orientation, dataArea, line.getBounds2D(),
+                        marker.getLabelOffset(),
+                        LengthAdjustmentType.EXPAND, anchor);
+            	g2.drawImage(secondIcon, (int) coordinates.getX() + 13 , (int) coordinates.getY(), new ImageObserver() {
+					@Override
+					public boolean imageUpdate(Image img, int infoflags, int x, int y,
+							int width, int height) {
+						return false;
+					}
+				});
+            }
             g2.setComposite(originalComposite);
         }
         else if (marker instanceof IntervalMarker) {
@@ -1145,6 +1177,7 @@ public abstract class AbstractXYItemRenderer extends AbstractRenderer
                 }
             }
 
+            // Now draw a label
             String label = marker.getLabel();
             RectangleAnchor anchor = marker.getLabelAnchor();
             if (label != null) {
@@ -1159,8 +1192,8 @@ public abstract class AbstractXYItemRenderer extends AbstractRenderer
                         (float) coordinates.getX(), (float) coordinates.getY(),
                         marker.getLabelTextAnchor());
             }
+            
             g2.setComposite(originalComposite);
-
         }
 
     }

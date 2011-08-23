@@ -63,6 +63,7 @@ package org.jfree.chart.plot;
 import java.awt.BasicStroke;
 import java.awt.Color;
 import java.awt.Font;
+import java.awt.Image;
 import java.awt.Paint;
 import java.awt.Stroke;
 import java.io.IOException;
@@ -106,6 +107,12 @@ public abstract class Marker implements Cloneable, Serializable {
 
     /** The outline stroke. */
     private transient Stroke outlineStroke;
+    
+    /** The first icon */
+    private Image firstIcon;
+    
+    /** The second icon */
+    private Image secondIcon;
 
     /** The alpha transparency. */
     private float alpha;
@@ -299,6 +306,41 @@ public abstract class Marker implements Cloneable, Serializable {
         notifyListeners(new MarkerChangeEvent(this));
     }
 
+    /**
+     * Returns the first (left-hand/bottom) icon.
+     * 
+     * @return The left-hand side icon
+     */
+    public Image getFirstIcon() {
+    	return firstIcon;
+    }
+    
+    /**
+     * Sets the icon displayed to the (left-hand/bottom) of the marker
+     * 
+     * @param icon the image
+     */
+    public void setFirstIcon(Image firstIcon) {
+    	this.firstIcon = firstIcon;
+    }
+    
+    /**
+     * Returns the second (right-hand/top) icon.
+     * 
+     * @return The right-hand side icon.
+     */
+    public Image getSecondIcon() {
+    	return secondIcon;
+    }
+
+    /**
+     * Sets the icon displayed to the (right-hand/top) of the marker
+     * 
+     * @param
+     */
+    public void setSecondIcon(Image secondIcon) {
+    	this.secondIcon = secondIcon;
+    }
     /**
      * Returns the alpha transparency.
      *
