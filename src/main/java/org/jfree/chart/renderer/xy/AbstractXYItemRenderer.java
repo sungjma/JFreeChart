@@ -1061,33 +1061,50 @@ public abstract class AbstractXYItemRenderer extends AbstractRenderer
             }
             
             // Now draw any icons
-            Image firstIcon = marker.getFirstIcon();
-            Image secondIcon = marker.getSecondIcon();
-            if (firstIcon != null) {
-                Point2D coordinates = calculateDomainMarkerTextAnchorPoint(
-                        g2, orientation, dataArea, line.getBounds2D(),
-                        marker.getLabelOffset(),
-                        LengthAdjustmentType.EXPAND, anchor);
-            	g2.drawImage(firstIcon, (int) coordinates.getX() - firstIcon.getWidth(null) - 5 , (int) coordinates.getY(), new ImageObserver() {
-					@Override
-					public boolean imageUpdate(Image img, int infoflags, int x, int y,
-							int width, int height) {
-						return false;
-					}
-				});
+            List lowIcons  = marker.getLowIcons();
+            List highIcons = marker.getHighIcons();
+            if (lowIcons != null) {
+            	int yOffset = 0;
+            	for (int i = 0; i < lowIcons.size(); i++) {
+            		Image lowIcon = (Image) lowIcons.get(i);
+	                Point2D coordinates = calculateDomainMarkerTextAnchorPoint(
+	                        g2, orientation, dataArea, line.getBounds2D(),
+	                        marker.getLabelOffset(),
+	                        LengthAdjustmentType.EXPAND, anchor);
+	            	g2.drawImage(
+	            			lowIcon,
+	            			(int) coordinates.getX() - lowIcon.getWidth(null) - 5 ,
+	            			(int) coordinates.getY() + yOffset,
+	            			new ImageObserver() {
+								@Override
+								public boolean imageUpdate(Image img, int infoflags, int x, int y,
+										int width, int height) {
+									return false;
+							}});
+	            	yOffset += lowIcon.getHeight(null) + 5;
+            	}
             }
-            if (secondIcon != null) {
-                Point2D coordinates = calculateDomainMarkerTextAnchorPoint(
-                        g2, orientation, dataArea, line.getBounds2D(),
-                        marker.getLabelOffset(),
-                        LengthAdjustmentType.EXPAND, anchor);
-            	g2.drawImage(secondIcon, (int) coordinates.getX() + 13 , (int) coordinates.getY(), new ImageObserver() {
-					@Override
-					public boolean imageUpdate(Image img, int infoflags, int x, int y,
-							int width, int height) {
-						return false;
-					}
-				});
+            if (highIcons != null) {
+            	int yOffset = 0;
+            	for (int i = 0; i < highIcons.size(); i++) {
+            		Image highIcon = (Image) highIcons.get(i);
+	                Point2D coordinates = calculateDomainMarkerTextAnchorPoint(
+	                        g2, orientation, dataArea, line.getBounds2D(),
+	                        marker.getLabelOffset(),
+	                        LengthAdjustmentType.EXPAND, anchor);
+	            	g2.drawImage(
+	            			highIcon,
+	            			(int) coordinates.getX() + 13 ,
+	            			(int) coordinates.getY() + yOffset,
+	            			new ImageObserver() {
+								@Override
+								public boolean imageUpdate(Image img, int infoflags, int x, int y,
+										int width, int height) {
+									return false;
+							}
+					});
+	            	yOffset += highIcon.getHeight(null) + 5;
+	            }
             }
             g2.setComposite(originalComposite);
         }

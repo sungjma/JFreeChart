@@ -71,6 +71,8 @@ import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
 import java.util.EventListener;
+import java.util.LinkedList;
+import java.util.List;
 
 import javax.swing.event.EventListenerList;
 
@@ -109,10 +111,10 @@ public abstract class Marker implements Cloneable, Serializable {
     private transient Stroke outlineStroke;
     
     /** The first icon */
-    private Image firstIcon;
+    private List lowIcons;
     
     /** The second icon */
-    private Image secondIcon;
+    private List highIcons;
 
     /** The alpha transparency. */
     private float alpha;
@@ -311,8 +313,8 @@ public abstract class Marker implements Cloneable, Serializable {
      * 
      * @return The left-hand side icon
      */
-    public Image getFirstIcon() {
-    	return firstIcon;
+    public List getLowIcons() {
+    	return lowIcons;
     }
     
     /**
@@ -320,8 +322,11 @@ public abstract class Marker implements Cloneable, Serializable {
      * 
      * @param icon the image
      */
-    public void setFirstIcon(Image firstIcon) {
-    	this.firstIcon = firstIcon;
+    public void addLowIcon(Image lowIcon) {
+    	if (lowIcons == null) {
+    		lowIcons = new LinkedList();
+    	}
+    	lowIcons.add(lowIcon);
     }
     
     /**
@@ -329,8 +334,8 @@ public abstract class Marker implements Cloneable, Serializable {
      * 
      * @return The right-hand side icon.
      */
-    public Image getSecondIcon() {
-    	return secondIcon;
+    public List getHighIcons() {
+    	return highIcons;
     }
 
     /**
@@ -338,8 +343,11 @@ public abstract class Marker implements Cloneable, Serializable {
      * 
      * @param
      */
-    public void setSecondIcon(Image secondIcon) {
-    	this.secondIcon = secondIcon;
+    public void addHighIcon(Image highIcon) {
+    	if (highIcons == null) {
+    		highIcons = new LinkedList();
+    	}
+    	highIcons.add(highIcon);
     }
     /**
      * Returns the alpha transparency.
