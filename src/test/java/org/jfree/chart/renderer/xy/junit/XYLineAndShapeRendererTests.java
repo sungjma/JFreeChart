@@ -44,19 +44,9 @@
 
 package org.jfree.chart.renderer.xy.junit;
 
-import java.awt.geom.Line2D;
-import java.awt.geom.Rectangle2D;
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.ObjectInput;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutput;
-import java.io.ObjectOutputStream;
-
 import junit.framework.Test;
 import junit.framework.TestCase;
 import junit.framework.TestSuite;
-
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.JFreeChart;
 import org.jfree.chart.LegendItem;
@@ -71,9 +61,14 @@ import org.jfree.data.xy.XYSeries;
 import org.jfree.data.xy.XYSeriesCollection;
 import org.jfree.util.PublicCloneable;
 
+import java.awt.geom.Line2D;
+import java.awt.geom.Rectangle2D;
+import java.io.*;
+
 /**
  * Tests for the {@link XYLineAndShapeRenderer} class.
  */
+@SuppressWarnings({"deprecation"})
 public class XYLineAndShapeRendererTests extends TestCase {
 
     /**

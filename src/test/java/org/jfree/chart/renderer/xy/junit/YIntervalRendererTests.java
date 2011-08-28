@@ -44,17 +44,9 @@
 
 package org.jfree.chart.renderer.xy.junit;
 
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.ObjectInput;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutput;
-import java.io.ObjectOutputStream;
-
 import junit.framework.Test;
 import junit.framework.TestCase;
 import junit.framework.TestSuite;
-
 import org.jfree.chart.JFreeChart;
 import org.jfree.chart.LegendItem;
 import org.jfree.chart.annotations.XYTextAnnotation;
@@ -71,9 +63,12 @@ import org.jfree.data.xy.YIntervalSeriesCollection;
 import org.jfree.ui.Layer;
 import org.jfree.util.PublicCloneable;
 
+import java.io.*;
+
 /**
  * Tests for the {@link YIntervalRenderer} class.
  */
+@SuppressWarnings({"deprecation"})
 public class YIntervalRendererTests extends TestCase {
 
     /**

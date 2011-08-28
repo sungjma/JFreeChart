@@ -50,28 +50,19 @@
 
 package org.jfree.data.time.junit;
 
-import java.io.ByteArrayInputStream;
-import java.io.ByteArrayOutputStream;
-import java.io.ObjectInput;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutput;
-import java.io.ObjectOutputStream;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.GregorianCalendar;
-import java.util.Locale;
-import java.util.TimeZone;
-
 import junit.framework.Test;
 import junit.framework.TestCase;
 import junit.framework.TestSuite;
-
 import org.jfree.data.time.Week;
 import org.jfree.data.time.Year;
+
+import java.io.*;
+import java.util.*;
 
 /**
  * Tests for the {@link Week} class.
  */
+@SuppressWarnings({"deprecation"})
 public class WeekTests extends TestCase {
 
     /** A week. */

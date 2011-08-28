@@ -101,18 +101,6 @@
 
 package org.jfree.chart.renderer.xy;
 
-import java.awt.Font;
-import java.awt.Graphics2D;
-import java.awt.Paint;
-import java.awt.Shape;
-import java.awt.Stroke;
-import java.awt.geom.Point2D;
-import java.awt.geom.Rectangle2D;
-import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
-import java.io.Serializable;
-
 import org.jfree.chart.LegendItem;
 import org.jfree.chart.axis.ValueAxis;
 import org.jfree.chart.entity.EntityCollection;
@@ -137,6 +125,14 @@ import org.jfree.ui.StandardGradientPaintTransformer;
 import org.jfree.util.ObjectUtilities;
 import org.jfree.util.PublicCloneable;
 import org.jfree.util.ShapeUtilities;
+
+import java.awt.*;
+import java.awt.geom.Point2D;
+import java.awt.geom.Rectangle2D;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.io.Serializable;
 
 /**
  * A renderer that draws bars on an {@link XYPlot} (requires an
@@ -738,7 +734,6 @@ public class XYBarRenderer extends AbstractXYItemRenderer
             if (dataset != null) {
                 XYSeriesLabelGenerator lg = getLegendItemLabelGenerator();
                 String label = lg.generateLabel(dataset, series);
-                String description = label;
                 String toolTipText = null;
                 if (getLegendItemToolTipGenerator() != null) {
                     toolTipText = getLegendItemToolTipGenerator().generateLabel(
@@ -749,16 +744,19 @@ public class XYBarRenderer extends AbstractXYItemRenderer
                     urlText = getLegendItemURLGenerator().generateLabel(
                             dataset, series);
                 }
-                Shape shape = this.legendBar;
+                Shape shape = getSeriesShape(series) ;
+                if (shape == null) {
+                    shape = getLegendBar();
+                }
                 Paint paint = lookupSeriesPaint(series);
                 Paint outlinePaint = lookupSeriesOutlinePaint(series);
                 Stroke outlineStroke = lookupSeriesOutlineStroke(series);
                 if (this.drawBarOutline) {
-                    result = new LegendItem(label, description, toolTipText,
+                    result = new LegendItem(label, label, toolTipText,
                             urlText, shape, paint, outlineStroke, outlinePaint);
                 }
                 else {
-                    result = new LegendItem(label, description, toolTipText,
+                    result = new LegendItem(label, label, toolTipText,
                             urlText, shape, paint);
                 }
                 result.setLabelFont(lookupLegendTextFont(series));
@@ -990,7 +988,7 @@ public class XYBarRenderer extends AbstractXYItemRenderer
         g2.setPaint(paint);
 
         // find out where to place the label...
-        ItemLabelPosition position = null;
+        ItemLabelPosition position;
         if (!negative) {
             position = getPositiveItemLabelPosition(series, item);
         }
@@ -1142,29 +1140,6 @@ public class XYBarRenderer extends AbstractXYItemRenderer
 
         return result;
 
-    }
-
-    /**
-     * Returns <code>true</code> if the specified anchor point is inside a bar.
-     *
-     * @param anchor  the anchor point.
-     *
-     * @return A boolean.
-     */
-    private boolean isInternalAnchor(ItemLabelAnchor anchor) {
-        return anchor == ItemLabelAnchor.CENTER
-               || anchor == ItemLabelAnchor.INSIDE1
-               || anchor == ItemLabelAnchor.INSIDE2
-               || anchor == ItemLabelAnchor.INSIDE3
-               || anchor == ItemLabelAnchor.INSIDE4
-               || anchor == ItemLabelAnchor.INSIDE5
-               || anchor == ItemLabelAnchor.INSIDE6
-               || anchor == ItemLabelAnchor.INSIDE7
-               || anchor == ItemLabelAnchor.INSIDE8
-               || anchor == ItemLabelAnchor.INSIDE9
-               || anchor == ItemLabelAnchor.INSIDE10
-               || anchor == ItemLabelAnchor.INSIDE11
-               || anchor == ItemLabelAnchor.INSIDE12;
     }
 
     /**

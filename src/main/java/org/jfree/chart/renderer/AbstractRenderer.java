@@ -2842,6 +2842,29 @@ public abstract class AbstractRenderer implements Cloneable, Serializable {
         return result;
     }
 
+      /**
+     * Returns <code>true</code> if the specified anchor point is inside a bar.
+     *
+     * @param anchor  the anchor point.
+     *
+     * @return A boolean.
+     */
+    protected boolean isInternalAnchor(ItemLabelAnchor anchor) {
+        return anchor == ItemLabelAnchor.CENTER
+               || anchor == ItemLabelAnchor.INSIDE1
+               || anchor == ItemLabelAnchor.INSIDE2
+               || anchor == ItemLabelAnchor.INSIDE3
+               || anchor == ItemLabelAnchor.INSIDE4
+               || anchor == ItemLabelAnchor.INSIDE5
+               || anchor == ItemLabelAnchor.INSIDE6
+               || anchor == ItemLabelAnchor.INSIDE7
+               || anchor == ItemLabelAnchor.INSIDE8
+               || anchor == ItemLabelAnchor.INSIDE9
+               || anchor == ItemLabelAnchor.INSIDE10
+               || anchor == ItemLabelAnchor.INSIDE11
+               || anchor == ItemLabelAnchor.INSIDE12;
+    }
+
     /**
      * Registers an object to receive notification of changes to the renderer.
      *

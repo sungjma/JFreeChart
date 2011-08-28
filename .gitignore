@@ -5,3 +5,7 @@ target/
 .project
 .classpath
 .settings/
+
+# Idea cruft
+/.idea/workspace.xml
+/out/**

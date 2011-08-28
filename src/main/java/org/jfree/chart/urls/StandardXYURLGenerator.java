@@ -48,10 +48,10 @@
 
 package org.jfree.chart.urls;
 
-import java.io.Serializable;
-
 import org.jfree.data.xy.XYDataset;
 import org.jfree.util.ObjectUtilities;
+
+import java.io.Serializable;
 
 /**
  * A URL generator.
@@ -139,7 +139,7 @@ public class StandardXYURLGenerator implements XYURLGenerator, Serializable {
     public String generateURL(XYDataset dataset, int series, int item) {
         // TODO: URLEncode?
         String url = this.prefix;
-        boolean firstParameter = url.indexOf("?") == -1;
+        boolean firstParameter = !url.contains("?");
         url += firstParameter ? "?" : "&amp;";
         url += this.seriesParameterName + "=" + series
                 + "&amp;" + this.itemParameterName + "=" + item;
@@ -168,6 +168,7 @@ public class StandardXYURLGenerator implements XYURLGenerator, Serializable {
                 this.seriesParameterName)) {
             return false;
         }
+        //noinspection RedundantIfStatement
         if (!ObjectUtilities.equal(that.itemParameterName,
                 this.itemParameterName)) {
             return false;

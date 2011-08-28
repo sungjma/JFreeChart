@@ -94,21 +94,6 @@
 
 package org.jfree.chart.renderer.category;
 
-import java.awt.BasicStroke;
-import java.awt.Color;
-import java.awt.Font;
-import java.awt.Graphics2D;
-import java.awt.Paint;
-import java.awt.Shape;
-import java.awt.Stroke;
-import java.awt.geom.Line2D;
-import java.awt.geom.Point2D;
-import java.awt.geom.Rectangle2D;
-import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
-import java.io.Serializable;
-
 import org.jfree.chart.LegendItem;
 import org.jfree.chart.axis.CategoryAxis;
 import org.jfree.chart.axis.ValueAxis;
@@ -131,6 +116,15 @@ import org.jfree.ui.StandardGradientPaintTransformer;
 import org.jfree.util.ObjectUtilities;
 import org.jfree.util.PaintUtilities;
 import org.jfree.util.PublicCloneable;
+
+import java.awt.*;
+import java.awt.geom.Line2D;
+import java.awt.geom.Point2D;
+import java.awt.geom.Rectangle2D;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.io.Serializable;
 
 /**
  * A {@link CategoryItemRenderer} that draws individual data items as bars.
@@ -1301,28 +1295,6 @@ public class BarRenderer extends AbstractCategoryItemRenderer
 
     }
 
-    /**
-     * Returns <code>true</code> if the specified anchor point is inside a bar.
-     *
-     * @param anchor  the anchor point.
-     *
-     * @return A boolean.
-     */
-    private boolean isInternalAnchor(ItemLabelAnchor anchor) {
-        return anchor == ItemLabelAnchor.CENTER
-               || anchor == ItemLabelAnchor.INSIDE1
-               || anchor == ItemLabelAnchor.INSIDE2
-               || anchor == ItemLabelAnchor.INSIDE3
-               || anchor == ItemLabelAnchor.INSIDE4
-               || anchor == ItemLabelAnchor.INSIDE5
-               || anchor == ItemLabelAnchor.INSIDE6
-               || anchor == ItemLabelAnchor.INSIDE7
-               || anchor == ItemLabelAnchor.INSIDE8
-               || anchor == ItemLabelAnchor.INSIDE9
-               || anchor == ItemLabelAnchor.INSIDE10
-               || anchor == ItemLabelAnchor.INSIDE11
-               || anchor == ItemLabelAnchor.INSIDE12;
-    }
 
     /**
      * Tests this instance for equality with an arbitrary object.

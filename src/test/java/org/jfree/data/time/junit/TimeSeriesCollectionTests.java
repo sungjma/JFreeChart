@@ -62,6 +62,7 @@ import org.jfree.data.time.TimeSeriesCollection;
 /**
  * A collection of test cases for the {@link TimeSeriesCollection} class.
  */
+@SuppressWarnings({"deprecation"})
 public class TimeSeriesCollectionTests extends TestCase {
 
     /**
