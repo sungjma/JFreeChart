@@ -220,50 +220,17 @@
  *               Voigt (DG);
  * 19-Mar-2009 : Added entity support - see patch 2603321 by Peter Kolb (DG);
  * 30-Mar-2009 : Delegate panning to axes (DG);
- *
+ * 30-May-2011 : Avoid infinite recursion by not firing change events during
+ *               paintComponent (Impact Computing / HS)
  */
 
 package org.jfree.chart.plot;
-
-import java.awt.AlphaComposite;
-import java.awt.BasicStroke;
-import java.awt.Color;
-import java.awt.Composite;
-import java.awt.Graphics2D;
-import java.awt.Paint;
-import java.awt.Shape;
-import java.awt.Stroke;
-import java.awt.geom.Line2D;
-import java.awt.geom.Point2D;
-import java.awt.geom.Rectangle2D;
-import java.io.IOException;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutputStream;
-import java.io.Serializable;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.Collections;
-import java.util.HashMap;
-import java.util.HashSet;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-import java.util.ResourceBundle;
-import java.util.Set;
-import java.util.TreeMap;
 
 import org.jfree.chart.LegendItem;
 import org.jfree.chart.LegendItemCollection;
 import org.jfree.chart.annotations.XYAnnotation;
 import org.jfree.chart.annotations.XYAnnotationBoundsInfo;
-import org.jfree.chart.axis.Axis;
-import org.jfree.chart.axis.AxisCollection;
-import org.jfree.chart.axis.AxisLocation;
-import org.jfree.chart.axis.AxisSpace;
-import org.jfree.chart.axis.AxisState;
-import org.jfree.chart.axis.TickType;
-import org.jfree.chart.axis.ValueAxis;
-import org.jfree.chart.axis.ValueTick;
+import org.jfree.chart.axis.*;
 import org.jfree.chart.event.ChartChangeEventType;
 import org.jfree.chart.event.PlotChangeEvent;
 import org.jfree.chart.event.RendererChangeEvent;
@@ -286,6 +253,17 @@ import org.jfree.util.ObjectList;
 import org.jfree.util.ObjectUtilities;
 import org.jfree.util.PaintUtilities;
 import org.jfree.util.PublicCloneable;
+
+import java.awt.*;
+import java.awt.geom.Line2D;
+import java.awt.geom.Point2D;
+import java.awt.geom.Rectangle2D;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.io.Serializable;
+import java.util.*;
+import java.util.List;
 
 /**
  * A general class for plotting data in the form of (x, y) pairs.  This plot can
@@ -580,6 +558,8 @@ public class XYPlot extends Plot implements ValueAxisPlot, Pannable, Zoomable,
      * @since 1.0.13
      */
     private boolean rangePannable;
+
+    private boolean fireChangeEvents = true;
 
     /**
      * Creates a new <code>XYPlot</code> instance with no dataset, no axes and
@@ -3144,6 +3124,7 @@ public class XYPlot extends Plot implements ValueAxisPlot, Pannable, Zoomable,
             return;
         }
 
+        setFireChangeEvents(false);
         // record the plot area...
         if (info != null) {
             info.setPlotArea(area);
@@ -3387,6 +3368,11 @@ public class XYPlot extends Plot implements ValueAxisPlot, Pannable, Zoomable,
 
         drawOutline(g2, dataArea);
 
+        setFireChangeEvents(true);
+    }
+
+    private void setFireChangeEvents(boolean value) {
+        this.fireChangeEvents = value;
     }
 
     /**
@@ -3774,6 +3760,17 @@ public class XYPlot extends Plot implements ValueAxisPlot, Pannable, Zoomable,
         return foundData;
     }
 
+    @Override
+    public void fireChangeEvent() {
+        if (isFireChangeEvents()) {
+            super.fireChangeEvent();
+        }
+    }
+
+    private boolean isFireChangeEvents() {
+        return this.fireChangeEvents;
+    }
+
     /**
      * Returns the domain axis for a dataset.
      *
@@ -3787,9 +3784,8 @@ public class XYPlot extends Plot implements ValueAxisPlot, Pannable, Zoomable,
             throw new IllegalArgumentException("Index " + index
                     + " out of bounds.");
         }
-        ValueAxis valueAxis = null;
-        List axisIndices = (List) this.datasetToDomainAxesMap.get(
-                new Integer(index));
+        ValueAxis valueAxis;
+        List axisIndices = (List) this.datasetToDomainAxesMap.get(index);
         if (axisIndices != null) {
             // the first axis in the list is used for data <--> Java2D
             Integer axisIndex = (Integer) axisIndices.get(0);
