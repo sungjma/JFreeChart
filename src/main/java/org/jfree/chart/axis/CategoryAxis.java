@@ -429,7 +429,6 @@ public class CategoryAxis extends Axis implements Cloneable, Serializable {
     	if (category == null) {
     		throw new IllegalArgumentException("Null 'category' argument.");
     	}
-    	System.out.println("Getting image label for: " + category);
     	Image result = (Image) this.tickLabelImageMap.get(category);
     	return result;
     }
@@ -462,9 +461,7 @@ public class CategoryAxis extends Axis implements Cloneable, Serializable {
         }
         if (image == null) {
         	this.tickLabelImageMap.remove(category);
-        	System.out.println("There is no category image for " + category.toString());
         } else {
-        	System.out.println("Adding category image for " + category.toString() + " : " + image.toString());
         	this.tickLabelImageMap.put(category, image);
         }
         notifyListeners(new AxisChangeEvent(this));
