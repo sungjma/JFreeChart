@@ -1193,14 +1193,12 @@ public class CategoryAxis extends Axis implements Cloneable, Serializable {
             while (iterator.hasNext()) {
                 Comparable category = (Comparable) iterator.next();
                 if (getTickLabelImage(category) != null) {
-                	System.out.println("Adding IMAGE TICK :D");
                 	Image image = getTickLabelImage(category);
                 	max = Math.max(image.getWidth(null), image.getHeight(null));
                 	Tick tick = new CategoryImageTick(category, image,
                 			position.getRotationAnchor(), position.getAngle());
                 	ticks.add(tick);
                 } else {
-                	System.out.println("Adding TEXT TICK :(");
 	                g2.setFont(getTickLabelFont(category));
 	                TextBlock label = createLabel(category, l * r, edge, g2);
 	                if (edge == RectangleEdge.TOP || edge == RectangleEdge.BOTTOM) {
