@@ -32,7 +32,7 @@
     <repository>
       <id>cloudbees-private-release-repository</id>
       <name>CloudBees Repository</name>
-      <url>dav:https://repository-evntcast.forge.cloudbees.com/release/</url>
+      <url>dav:https://repository-twitsprout.forge.cloudbees.com/release/</url>
     </repository>
   </distributionManagement>
 
@@ -90,7 +90,7 @@
   <repositories>
     <repository>
       <id>jfree</id>
-      <url>https://repository-evntcast.forge.cloudbees.com/release/</url>
+      <url>https://repository-twitsprout.forge.cloudbees.com/release/</url>
     </repository>
   </repositories>
 
